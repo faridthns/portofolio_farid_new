@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: "Gilgan";
+  src: url("../assets/font/gilgan.otf");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@config "../../tailwind.config.js";
+
+html[class="light"] {
+  background-color: #ffffff;
+
+  background-image:
+    linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+    linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
+  background-size: 6rem 4rem;
+}
+
+html[class="dark"] {
+  background: radial-gradient(125% 125% at 50% 10%, #000 40%, #63e 100%);
+  background-attachment: fixed;
+}
+
+.parallax {
+  font-family: "Quantico", sans-serif;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  letter-spacing: -2px;
+  line-height: 0.8;
+  margin: 0;
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.parallax .scroller {
+  font-weight: 600;
+  text-transform: uppercase;
+  display: flex;
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.parallax span {
+  display: block;
+  margin-right: 30px;
+}
