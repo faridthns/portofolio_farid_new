@@ -76,7 +76,10 @@ export default function IndexPage() {
             color="secondary"
             variant="light"
             onClick={() =>
-              window.open("https://www.linkedin.com/in/faridramadhan03/", "_blank")
+              window.open(
+                "https://www.linkedin.com/in/faridramadhan03/",
+                "_blank"
+              )
             }
           >
             <FaLinkedin size={30} />
@@ -86,7 +89,10 @@ export default function IndexPage() {
             color="secondary"
             variant="light"
             onClick={() =>
-              window.open("https://www.instagram.com/farid.ramadhann_/", "_blank")
+              window.open(
+                "https://www.instagram.com/farid.ramadhann_/",
+                "_blank"
+              )
             }
           >
             <FaInstagram size={30} />
