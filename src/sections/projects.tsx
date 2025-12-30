@@ -21,10 +21,21 @@ import { IoMdDocument } from "react-icons/io";
 
 import { title, subtitle } from "@/components/primitives";
 
-export default function Projects() {
-  const [selectedItem, setSelectedItem] = React.useState(null);
+interface ProjectItem {
+  title: string;
+  icon: React.ReactNode;
+  img: string;
+  desc: string;
+  tech: string[];
+  link: string;
+}
 
-  const openModal = (item) => {
+export default function Projects() {
+  const [selectedItem, setSelectedItem] = React.useState<ProjectItem | null>(
+    null,
+  );
+
+  const openModal = (item: ProjectItem) => {
     setSelectedItem(item);
   };
 
@@ -102,43 +113,40 @@ export default function Projects() {
       </div>
       <div className="gap-6 grid grid-cols-1 sm:grid-cols-3 justify-items-center py-6">
         {list.map((item, index) => (
-          <>
-            <motion.div
-              animate={{ opacity: 1, y: 0 }}
-              className="flex justify-items-center"
-              initial={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.3 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Card key={index} className="py-4  max-w-xs w-full">
-                <CardHeader className="pb-0 pt-2 px-4 flex items-center">
-                  {item.icon}&nbsp;
-                  <h4 className="font-bold text-large text-wrap">
-                    {item.title}
-                  </h4>
-                </CardHeader>
-                <CardBody className="overflow-visible py-2 grid grid-cols gap-3">
-                  <Image
-                    alt="Card background"
-                    className="object-cover rounded-xl"
-                    src={item.img}
-                    width={270}
-                  />
-                  <Button color="primary" onPress={() => openModal(item)}>
-                    See project
-                  </Button>
-                  <div className="flex flex-wrap gap-1">
-                    {item.tech.slice(0, 3).map((i, index) => (
-                      <Chip key={index} color="secondary" size="sm">
-                        {i}
-                      </Chip>
-                    ))}
-                  </div>
-                </CardBody>
-              </Card>
-            </motion.div>
-          </>
+          <motion.div
+            key={index}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex justify-items-center"
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Card key={index} className="py-4  max-w-xs w-full">
+              <CardHeader className="pb-0 pt-2 px-4 flex items-center">
+                {item.icon}&nbsp;
+                <h4 className="font-bold text-large text-wrap">{item.title}</h4>
+              </CardHeader>
+              <CardBody className="overflow-visible py-2 grid grid-cols gap-3">
+                <Image
+                  alt="Card background"
+                  className="object-cover rounded-xl"
+                  src={item.img}
+                  width={270}
+                />
+                <Button color="primary" onPress={() => openModal(item)}>
+                  See project
+                </Button>
+                <div className="flex flex-wrap gap-1">
+                  {item.tech.slice(0, 3).map((i, index) => (
+                    <Chip key={index} color="secondary" size="sm">
+                      {i}
+                    </Chip>
+                  ))}
+                </div>
+              </CardBody>
+            </Card>
+          </motion.div>
         ))}
       </div>
       <Modal
@@ -157,31 +165,37 @@ export default function Projects() {
                 {selectedItem?.title}
               </ModalHeader>
               <ModalBody>
-                <Image
-                  alt="Card background"
-                  className="object-cover rounded-xl"
-                  src={selectedItem.img}
-                  width="100%"
-                />
-                <p className="text-justify">{selectedItem.desc}</p>
-                <div className="flex flex-wrap gap-1">
-                  <span>Tech :</span>
-                  {selectedItem.tech.map((i, index) => (
-                    <Chip key={index} color="secondary" size="sm">
-                      {i}
-                    </Chip>
-                  ))}
-                </div>
+                {selectedItem && (
+                  <>
+                    <Image
+                      alt={selectedItem.title}
+                      className="object-cover rounded-xl"
+                      src={selectedItem.img}
+                      width="100%"
+                    />
+                    <p className="text-justify">{selectedItem.desc}</p>
+                    <div className="flex flex-wrap gap-1">
+                      <span>Tech :</span>
+                      {selectedItem.tech.map((i, index) => (
+                        <Chip key={index} color="secondary" size="sm">
+                          {i}
+                        </Chip>
+                      ))}
+                    </div>
+                  </>
+                )}
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <a href={selectedItem.link} rel="noreferrer" target="_blank">
-                  <Button color="primary">
-                    View live demo <FaExternalLinkAlt />
-                  </Button>
-                </a>
+                {selectedItem && (
+                  <a href={selectedItem.link} rel="noreferrer" target="_blank">
+                    <Button color="primary">
+                      View live demo <FaExternalLinkAlt />
+                    </Button>
+                  </a>
+                )}
               </ModalFooter>
             </>
           )}

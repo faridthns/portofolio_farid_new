@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   Divider,
   Form,
@@ -18,14 +18,26 @@ import { BsFillSendFill } from "react-icons/bs";
 import { title, subtitle } from "@/components/primitives";
 
 export default function Contactme() {
-  const [errors, setErrors] = useState({});
+  interface FormValues {
+    name: string;
+    email: string;
+    pesan: string;
+  }
+
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof FormValues, string>>
+  >({});
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const targetRef = useRef(null);
   const { moveProps } = useDraggable({ targetRef });
 
-  const validateForm = (data) => {
-    const newErrors = {};
+  const validateForm = (data: {
+    name: string;
+    email: string;
+    pesan: string;
+  }) => {
+    const newErrors: Record<string, string> = {};
 
     if (!data.name) newErrors.name = "Nama wajib diisi";
     if (!data.email) newErrors.email = "Email wajib diisi";
@@ -34,12 +46,12 @@ export default function Contactme() {
     return newErrors;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    const newErrors = validateForm(data);
+    const newErrors = validateForm(data as any);
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -48,7 +60,7 @@ export default function Contactme() {
     }
 
     setErrors({});
-    e.target.submit();
+    (e.currentTarget as HTMLFormElement).submit();
   };
 
   return (
@@ -81,7 +93,7 @@ export default function Contactme() {
         onOpenChange={onOpenChange}
       >
         <ModalContent>
-          {(onClose) => (
+          {(_onClose) => (
             <>
               <ModalHeader {...moveProps} className="flex flex-col gap-1">
                 <span className="flex items-center">
@@ -92,29 +104,25 @@ export default function Contactme() {
               <ModalBody>
                 <Form
                   action="https://formsubmit.co/faridramadhan03@gmail.com"
-                  method="post"
                   className="w-full space-y-4"
+                  method="post"
                   validationErrors={errors}
-                  onSubmit={onSubmit}
                   onReset={() => setErrors({})}
+                  onSubmit={onSubmit}
                 >
                   <div className="flex flex-col gap-4 w-full">
                     <Input
                       isRequired
-                      name="name"
-                      label="Nama"
-                      placeholder="Enter your name"
                       errorMessage={
                         errors.name ? errors.name : "Please enter your name"
                       }
+                      label="Nama"
+                      name="name"
+                      placeholder="Enter your name"
                     />
 
                     <Input
                       isRequired
-                      name="email"
-                      type="email"
-                      label="Email"
-                      placeholder="Enter your email"
                       errorMessage={({ validationDetails }) => {
                         if (validationDetails.valueMissing)
                           return "Please enter your email";
@@ -123,14 +131,18 @@ export default function Contactme() {
 
                         return errors.email;
                       }}
+                      label="Email"
+                      name="email"
+                      placeholder="Enter your email"
+                      type="email"
                     />
 
                     <Textarea
                       isRequired
-                      name="pesan"
-                      label="Pesan"
-                      placeholder="Enter your message"
                       errorMessage={errors.pesan}
+                      label="Pesan"
+                      name="pesan"
+                      placeholder="Enter your message"
                     />
                   </div>
 
